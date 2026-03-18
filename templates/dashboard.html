@@ -1,12 +1,240 @@
-<h2>Bienvenido {{ current_user.username }}</h2>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --bg: #f4f6f8;
+      --card-bg: #ffffff;
+      --primary: #1f3c88;
+      --primary-soft: #eef2fb;
+      --success: #16a34a;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --border: #e5e7eb;
+      --border-strong: #d1d5db;
+    }
 
-{% if current_user.role == 'admin' %}
-  <a href="/inventario">Inventario</a><br>
-  <a href="/solicitudes">Solicitudes</a>
-{% else %}
-  <a href="/inventario">Ver inventario</a><br>
-  <a href="/mis_solicitudes">Mis solicitudes</a>
-{% endif %}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-<br><br>
-<a href="/logout">Cerrar sesión</a>
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .dashboard-wrapper {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .welcome-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 48px 32px;
+      text-align: center;
+      box-shadow: 
+        0 32px 64px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .greeting {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .user-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--primary-soft);
+      color: var(--primary);
+      padding: 4px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 36px;
+    }
+
+    .nav-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .nav-card {
+      background: rgba(248, 250, 252, 0.8);
+      border: 1px solid rgba(31, 60, 136, 0.12);
+      border-radius: 16px;
+      padding: 20px 24px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 500;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      transition: left 0.5s;
+    }
+
+    .nav-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      border-color: rgba(31, 60, 136, 0.24);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .nav-card:hover::before {
+      left: 100%;
+    }
+
+    .nav-card.admin {
+      background: linear-gradient(135deg, #ecfdf3 0%, #dcfce7 100%);
+      border-color: rgba(22, 163, 74, 0.2);
+    }
+
+    .nav-card.user {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-color: rgba(245, 158, 11, 0.2);
+    }
+
+    .nav-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .nav-card.admin .nav-icon {
+      background: rgba(22, 163, 74, 0.2);
+      color: var(--success);
+    }
+
+    .nav-card.user .nav-icon {
+      background: rgba(245, 158, 11, 0.2);
+      color: #d97706;
+    }
+
+    .logout-section {
+      border-top: 1px solid rgba(31, 60, 136, 0.12);
+      padding-top: 24px;
+    }
+
+    .logout-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 20px;
+      background: rgba(220, 38, 38, 0.1);
+      color: #dc2626;
+      border: 1px solid rgba(220, 38, 38, 0.2);
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.15s ease;
+    }
+
+    .logout-btn:hover {
+      background: rgba(220, 38, 38, 0.15);
+      border-color: rgba(220, 38, 38, 0.3);
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 480px) {
+      .welcome-card {
+        padding: 36px 24px;
+        margin: 0 8px;
+      }
+
+      .greeting {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard-wrapper">
+    <div class="welcome-card">
+      <h2 class="greeting">Bienvenido {{ current_user.username }}</h2>
+      
+      <div class="user-badge">
+        {% if current_user.role == 'admin' %}
+          Rol Admin
+        {% else %}
+          Usuario
+        {% endif %}
+      </div>
+
+      <div class="nav-grid">
+        {% if current_user.role == 'admin' %}
+          <a href="/inventario" class="nav-card admin">
+            <div class="nav-icon">📦</div>
+            Inventario
+          </a>
+          <a href="/solicitudes" class="nav-card admin">
+            <div class="nav-icon">📋</div>
+            Solicitudes
+          </a>
+        {% else %}
+          <a href="/inventario" class="nav-card user">
+            <div class="nav-icon">📦</div>
+            Ver inventario
+          </a>
+          <a href="/mis_solicitudes" class="nav-card user">
+            <div class="nav-icon">📋</div>
+            Mis solicitudes
+          </a>
+        {% endif %}
+      </div>
+
+      <div class="logout-section">
+        <a href="/logout" class="logout-btn">
+          🚪 Cerrar sesión
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
