@@ -1,0 +1,12 @@
+<h2>Bienvenido {{ current_user.username }}</h2>
+
+{% if current_user.role == 'admin' %}
+  <a href="/inventario">Inventario</a><br>
+  <a href="/solicitudes">Solicitudes</a>
+{% else %}
+  <a href="/inventario">Ver inventario</a><br>
+  <a href="/mis_solicitudes">Mis solicitudes</a>
+{% endif %}
+
+<br><br>
+<a href="/logout">Cerrar sesión</a>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Solicitudes</title>
+</head>
+<body>
+
+    <h2>📋 Solicitudes (Admin)</h2>
+
+    <a href="/dashboard">⬅ Volver</a>
+    <br><br>
+
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Usuario</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Estado</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in solicitudes %}
+            <tr>
+                <td>{{ s.id }}</td>
+                <td>{{ s.usuario }}</td>
+
+                <!-- 🔥 AQUÍ EL CAMBIO -->
+                <td>{{ items[s.item_id] }}</td>
+
+                <td>{{ s.cantidad }}</td>
+                <td>{{ s.estado }}</td>
+                <td>
+                    {% if s.estado == 'pendiente' %}
+                        <a href="/aprobar/{{ s.id }}">✅ Aprobar</a> |
+                        <a href="/rechazar/{{ s.id }}">❌ Rechazar</a>
+                    {% else %}
+                        ✔ Procesado
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

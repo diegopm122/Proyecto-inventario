@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Solicitudes</title>
+</head>
+<body>
+
+    <h2>📦 Mis Solicitudes</h2>
+
+    <a href="/dashboard">⬅ Volver</a>
+    <br><br>
+
+    <table border="1" cellpadding="8">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in solicitudes %}
+            <tr>
+                <td>{{ s.id }}</td>
+
+                <!-- 🔥 AQUÍ EL CAMBIO -->
+                <td>{{ items[s.item_id] }}</td>
+
+                <td>{{ s.cantidad }}</td>
+                <td>{{ s.estado }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

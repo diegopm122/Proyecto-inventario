@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Inventario</title>
+</head>
+<body>
+
+<h2>Inventario</h2>
+<p>Usuario: {{ current_user.username }}</p>
+
+<ul>
+{% for item in items %}
+  <li>
+    {{ item.nombre }} - Stock: {{ item.cantidad }}
+
+    {% if current_user.role != 'admin' %}
+    <form method="POST" action="/solicitar">
+      <input type="hidden" name="item_id" value="{{ item.id }}">
+      <input type="number" name="cantidad" placeholder="Cantidad">
+      <button type="submit">Pedir</button>
+    </form>
+    {% endif %}
+  </li>
+{% endfor %}
+</ul>
+
+{% if current_user.role == 'admin' %}
+<h3>Agregar producto</h3>
+<form method="POST" action="/agregar">
+  <input name="nombre" placeholder="Nombre">
+  <input name="cantidad" type="number" placeholder="Cantidad">
+  <button type="submit">Agregar</button>
+</form>
+
+<br>
+<a href="/solicitudes">Ver solicitudes</a>
+{% endif %}
+
+{% if current_user.role != 'admin' %}
+<br><br>
+<a href="/mis_solicitudes">Ver mis solicitudes</a>
+{% endif %}
+
+<br><br>
+<a href="/dashboard">Volver</a>
+
+</body>
+</html>
