@@ -17,7 +17,7 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'microgeo30@gmail.com'
-app.config['MAIL_PASSWORD'] = 'ihvi xomc iowx rnho'
+app.config['MAIL_PASSWORD'] = 'xdxdxdxd'
 app.config['MAIL_DEFAULT_SENDER'] = ('Inventario Microgeo', 'microgeo30@gmail.com')
 
 db.init_app(app)
